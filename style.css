@@ -1,0 +1,67 @@
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2");
+}
+
+html {
+  font-size: 18px;
+  color: #888;
+  font-family: "IBM Plex Mono";
+  line-height: 1.5;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90vh;
+}
+
+p {
+  max-width: 60ch;
+  white-space: pre-wrap;
+  padding: 1rem;
+}
+
+.hit {
+  color: #222;
+}
+
+.miss {
+  color: #222;
+  background-color: #f88;
+}
+
+.cursor {
+  background-color: #222;
+  color: #fff;
+}
+
+.results {
+  color: #e00;
+  padding-top: 2rem;
+}
+
+footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+footer > * {
+  padding: 1rem;
+}
+
+a {
+  text-decoration: unset;
+  color: unset;
+}
+
+a:hover, .selected {
+  color: #222;
+}
