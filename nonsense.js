@@ -1,10 +1,10 @@
 function randomWord(wordWeights, totalWeight) {
-  let n = Math.floor(Math.random() * totalWeight);
+  let r = Math.random() * totalWeight;
   for (const { word, weight } of wordWeights) {
-    if (n < weight) {
+    if (r < weight) {
       return word;
     }
-    n -= weight;
+    r -= weight;
   }
 }
 
