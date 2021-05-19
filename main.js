@@ -1,4 +1,4 @@
-import { render } from "./ui.js";
+import { render, renderIncremental } from "./ui.js";
 import {
   handleBackspace,
   handleBackspaceWord,
@@ -33,6 +33,8 @@ document.addEventListener("keydown", (e) => {
     return;
   } else if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key === "Escape") {
     state = generateState();
+    render(state, app);
+    return;
   } else if (state.finish) {
     return;
   } else if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1) {
@@ -42,5 +44,5 @@ document.addEventListener("keydown", (e) => {
   } else if ((e.ctrlKey || e.altKey) && !e.metaKey && e.key === "Backspace") {
     state = handleBackspaceWord(state);
   }
-  render(state, app);
+  renderIncremental(state);
 });

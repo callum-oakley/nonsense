@@ -9,23 +9,37 @@ function h(tag, childOrAttrs, ...children) {
   return element;
 }
 
+const charSpans = {};
+
+function charClassName(state, i) {
+  return i === state.cursor
+    ? "cursor"
+    : i < state.cursor
+    ? state.text[i].miss ? "miss" : "hit"
+    : "";
+}
+
+function renderChar(state, i) {
+  const charSpan = h(
+    "span",
+    { className: charClassName(state, i) },
+    state.text[i].target,
+  );
+  charSpans[i] = charSpan;
+  return charSpan;
+}
+
 function renderText(state) {
   return h(
     "span",
-    ...state.text.map((c, i) =>
-      h("span", {
-        className: i === state.cursor
-          ? "cursor"
-          : i < state.cursor
-          ? c.miss ? "miss" : "hit"
-          : "",
-      }, (i < state.cursor && c.miss) || c.target)
-    ),
+    ...state.text.map((_, i) => renderChar(state, i)),
     "\n\n",
   );
 }
 
-function renderResult(state) {
+let resultsSpan;
+
+function renderResults(state) {
   const wpm = Math.floor(
     12000 * state.cursor /
       ((state.finish || Date.now()) - state.start),
@@ -48,7 +62,8 @@ function renderResult(state) {
   } else {
     results = "type the above text\nerrors must be corrected\nhit esc to reset";
   }
-  return h("span", { className: "results" }, results);
+  resultsSpan = h("span", { className: "results" }, results);
+  return resultsSpan;
 }
 
 function renderWordsLinks(state) {
@@ -73,12 +88,24 @@ function renderSourceLink(state) {
   );
 }
 
+let cursorAtLastRender;
+
 export function render(state, app) {
-  while (app.firstChild) {
-    app.removeChild(app.firstChild);
-  }
-  app.append(
-    h("p", renderText(state), renderResult(state)),
+  app.firstChild.replaceWith(h(
+    "div",
+    h("p", renderText(state), renderResults(state)),
     h("footer", renderWordsLinks(state), renderSourceLink(state)),
-  );
+  ));
+  cursorAtLastRender = state.cursor;
+}
+
+// Optimisation for the common case when we know we're only changing classes
+// around the cursor and updating the results.
+export function renderIncremental(state) {
+  const [iMin, iMax] = [state.cursor, cursorAtLastRender].sort((a, b) => a - b);
+  for (let i = iMin; i <= iMax && i < state.text.length; i++) {
+    charSpans[i].className = charClassName(state, i);
+  }
+  resultsSpan.replaceWith(renderResults(state));
+  cursorAtLastRender = state.cursor;
 }

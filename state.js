@@ -12,25 +12,20 @@ function updateTimer(state) {
 }
 
 export function handleChar(state, key) {
-  return updateTimer({
-    ...state,
-    cursor: Math.min(state.cursor + 1, state.text.length),
-    text: state.text.map((c, i) =>
-      i === state.cursor && c.target !== key ? { ...c, miss: key } : c
-    ),
-    hits: state.hits += state.text[state.cursor].target === key ? 1 : 0,
-    misses: state.misses += state.text[state.cursor].target !== key ? 1 : 0,
-  });
+  if (state.text[state.cursor].target === key) {
+    state.hits++;
+  } else {
+    state.misses++;
+    state.text[state.cursor].miss = key;
+  }
+  state.cursor = Math.min(state.cursor + 1, state.text.length);
+  return updateTimer(state);
 }
 
 export function handleBackspace(state) {
-  return {
-    ...state,
-    cursor: Math.max(state.cursor - 1, 0),
-    text: state.text.map((c, i) =>
-      i === (state.cursor - 1) ? { target: c.target } : c
-    ),
-  };
+  state.cursor = Math.max(state.cursor - 1, 0);
+  delete state.text[state.cursor].miss;
+  return state;
 }
 
 export function handleBackspaceWord(state) {
