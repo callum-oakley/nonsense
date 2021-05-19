@@ -65,15 +65,6 @@ a he me kill sister with went any has well do know for for mean stand of hooker
 a is actually just right used means you of
 ```
 
-## Under the hood (for those who care about such things)
-
-The whole app is ~5kb of javascript -- written by hand with no compilation
-steps and no dependencies. It's a fun way to work sometimes. The ui is a
-"react-ish" function of the app state, but I just throw away the whole dom and
-build it from scratch on every key press. It's plenty fast enough because
-there's really not much going on, but maybe I'll write a vdom implementation
-one day...
-
 [Try it!]: https://callumoakley.net/nonsense/
 [Zipf's law]: https://en.wikipedia.org/wiki/Zipf%27s_law
 [this one on Wiktionary]: https://en.wiktionary.org/wiki/Wiktionary:Frequency_lists#TV_and_movie_scripts
