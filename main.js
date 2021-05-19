@@ -30,19 +30,24 @@ fetch("word-weights.txt")
 
 document.addEventListener("keydown", (e) => {
   if (!state) {
-    return;
+    // do nothing
   } else if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key === "Escape") {
+    e.preventDefault();
     state = generateState();
     render(state, app);
-    return;
   } else if (state.finish) {
-    return;
+    // do nothing
   } else if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key.length === 1) {
+    e.preventDefault();
     state = handleChar(state, e.key);
+    renderIncremental(state);
   } else if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key === "Backspace") {
+    e.preventDefault();
     state = handleBackspace(state);
+    renderIncremental(state);
   } else if ((e.ctrlKey || e.altKey) && !e.metaKey && e.key === "Backspace") {
+    e.preventDefault();
     state = handleBackspaceWord(state);
+    renderIncremental(state);
   }
-  renderIncremental(state);
 });
