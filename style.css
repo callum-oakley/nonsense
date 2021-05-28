@@ -1,14 +1,7 @@
-@font-face {
-  font-family: "IBM Plex Mono";
-  font-style: normal;
-  font-weight: 400;
-  src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2");
-}
-
 html {
   font-size: 18px;
   color: #888;
-  font-family: "IBM Plex Mono";
+  font-family: ui-monospace, monospace;
   line-height: 1.5;
 }
 
