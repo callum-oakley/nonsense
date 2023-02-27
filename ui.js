@@ -15,8 +15,8 @@ function charClassName(state, i) {
   return i === state.cursor
     ? "cursor"
     : i < state.cursor
-    ? state.text[i].miss ? "miss" : "hit"
-    : "";
+      ? state.text[i].miss ? "miss" : "hit"
+      : "";
 }
 
 function renderChar(state, i) {
@@ -42,7 +42,7 @@ let resultsSpan;
 function renderResults(state) {
   const wpm = Math.floor(
     12000 * state.cursor /
-      ((state.finish || Date.now()) - state.start),
+    ((state.finish || Date.now()) - state.start),
   );
   const accuracy = Math.floor(100 * state.hits / (state.hits + state.misses));
   let results;
