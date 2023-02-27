@@ -21,8 +21,10 @@ function generateState() {
 fetch("word-weights.txt")
   .then((res) => res.text())
   .then((text) => {
-    wordWeights = [...text.matchAll(/(\S+)\s+(\d+)/g)]
-      .map((m) => ({ word: m[1], weight: parseInt(m[2]) }));
+    wordWeights = [...text.matchAll(/(\S+)\s+(\d+)/g)].map((m) => ({
+      word: m[1],
+      weight: parseInt(m[2]),
+    }));
     state = generateState();
     render(state, app);
   })

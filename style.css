@@ -53,7 +53,7 @@ footer {
   justify-content: space-between;
 }
 
-footer>* {
+footer > * {
   padding: 1rem;
 }
 

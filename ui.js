@@ -12,18 +12,22 @@ function h(tag, childOrAttrs, ...children) {
 const charSpans = {};
 
 function charClassName(state, i) {
-  return i === state.cursor
+  return state.finish && i == state.cursor
+    ? ""
+    : i === state.cursor
     ? "cursor"
     : i < state.cursor
-      ? state.text[i].miss ? "miss" : "hit"
-      : "";
+    ? state.text[i].miss
+      ? "miss"
+      : "hit"
+    : "";
 }
 
 function renderChar(state, i) {
   const charSpan = h(
     "span",
     { className: charClassName(state, i) },
-    state.text[i].target,
+    i < state.text.length ? state.text[i].target : " "
   );
   charSpans[i] = charSpan;
   return charSpan;
@@ -33,7 +37,8 @@ function renderText(state) {
   return h(
     "span",
     ...state.text.map((_, i) => renderChar(state, i)),
-    "\n\n",
+    renderChar(state, state.text.length),
+    "\n\n"
   );
 }
 
@@ -41,19 +46,17 @@ let resultsSpan;
 
 function renderResults(state) {
   const wpm = Math.floor(
-    12000 * state.cursor /
-    ((state.finish || Date.now()) - state.start),
+    (12000 * state.cursor) / ((state.finish || Date.now()) - state.start)
   );
-  const accuracy = Math.floor(100 * state.hits / (state.hits + state.misses));
+  const accuracy = Math.floor((100 * state.hits) / (state.hits + state.misses));
   let results;
   if (state.finish) {
-    results =
-      `${wpm} words per minute\n${accuracy}% accuracy\nhit esc to reset`;
+    results = `${wpm} words per minute\n${accuracy}% accuracy\nhit esc to reset`;
   } else if (state.cursor > 5) {
     const miss = state.text.findIndex((c) => c.miss);
     if (
-      (miss >= 0) &&
-      (state.cursor > miss + 5 || state.cursor == state.text.length - 1)
+      miss >= 0 &&
+      (state.cursor > miss + 5 || state.cursor == state.text.length)
     ) {
       results = wpm + "\nerrors must be corrected\n ";
     } else {
@@ -71,31 +74,37 @@ function renderWordsLinks(state) {
     "span",
     "words: ",
     ...[40, 50, 70, 100, 140].flatMap((wc) => [
-      h("a", {
-        href: `?wordCount=${wc}`,
-        className: wc === state.wordCount ? "selected" : "",
-      }, wc),
+      h(
+        "a",
+        {
+          href: `?wordCount=${wc}`,
+          className: wc === state.wordCount ? "selected" : "",
+        },
+        wc
+      ),
       " ",
-    ]),
+    ])
   );
 }
 
-function renderSourceLink(state) {
+function renderSourceLink() {
   return h(
     "a",
     { href: "https://github.com/callum-oakley/nonsense" },
-    "source",
+    "source"
   );
 }
 
 let cursorAtLastRender;
 
 export function render(state, app) {
-  app.firstChild.replaceWith(h(
-    "div",
-    h("p", renderText(state), renderResults(state)),
-    h("footer", renderWordsLinks(state), renderSourceLink(state)),
-  ));
+  app.firstChild.replaceWith(
+    h(
+      "div",
+      h("p", renderText(state), renderResults(state)),
+      h("footer", renderWordsLinks(state), renderSourceLink())
+    )
+  );
   cursorAtLastRender = state.cursor;
 }
 
@@ -103,7 +112,7 @@ export function render(state, app) {
 // around the cursor and updating the results.
 export function renderIncremental(state) {
   const [iMin, iMax] = [state.cursor, cursorAtLastRender].sort((a, b) => a - b);
-  for (let i = iMin; i <= iMax && i < state.text.length; i++) {
+  for (let i = iMin; i <= iMax && i <= state.text.length; i++) {
     charSpans[i].className = charClassName(state, i);
   }
   resultsSpan.replaceWith(renderResults(state));

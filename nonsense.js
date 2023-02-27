@@ -12,9 +12,9 @@ export function generateNonsense(wordWeights, wordCount) {
   const totalWeight = wordWeights
     .map((ww) => ww.weight)
     .reduce((a, b) => a + b);
-  let nonsense = "";
+  let nonsense = randomWord(wordWeights, totalWeight);
   while (nonsense.length < wordCount * 5) {
-    nonsense += randomWord(wordWeights, totalWeight) + " ";
+    nonsense += " " + randomWord(wordWeights, totalWeight);
   }
   return nonsense;
 }
