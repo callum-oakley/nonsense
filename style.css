@@ -1,14 +1,14 @@
 @font-face {
-  font-family: "IBM Plex Mono";
+  font-family: "Berkeley Mono";
   font-style: normal;
-  font-weight: 400;
-  src: url("fonts/IBMPlexMono-Regular.woff2") format("woff2");
+  font-weight: normal;
+  src: url("/fonts/BerkeleyMono-Regular.woff2") format("woff2");
 }
 
 html {
   font-size: 18px;
   color: #888;
-  font-family: "IBM Plex Mono";
+  font-family: "Berkeley Mono";
   line-height: 1.5;
 }
 
