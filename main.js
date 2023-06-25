@@ -43,11 +43,17 @@ document.addEventListener("keydown", (e) => {
     e.preventDefault();
     state = handleChar(state, e.key);
     renderIncremental(state);
-  } else if (!e.ctrlKey && !e.altKey && !e.metaKey && e.key === "Backspace") {
+  } else if (
+    (!e.ctrlKey && !e.altKey && !e.metaKey && e.key === "Backspace") ||
+    (e.ctrlKey || e.altKey) && !e.metaKey && e.key === "h"
+  ) {
     e.preventDefault();
     state = handleBackspace(state);
     renderIncremental(state);
-  } else if ((e.ctrlKey || e.altKey) && !e.metaKey && e.key === "Backspace") {
+  } else if (
+    (e.ctrlKey || e.altKey) && !e.metaKey &&
+    (e.key === "Backspace" || e.key === "w")
+  ) {
     e.preventDefault();
     state = handleBackspaceWord(state);
     renderIncremental(state);
