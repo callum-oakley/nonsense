@@ -15,19 +15,19 @@ function charClassName(state, i) {
   return state.finish && i == state.cursor
     ? ""
     : i === state.cursor
-    ? "cursor"
-    : i < state.cursor
-    ? state.text[i].miss
-      ? "miss"
-      : "hit"
-    : "";
+      ? "cursor"
+      : i < state.cursor
+        ? state.text[i].miss
+          ? "miss"
+          : "hit"
+        : "";
 }
 
 function renderChar(state, i) {
   const charSpan = h(
     "span",
     { className: charClassName(state, i) },
-    i < state.text.length ? state.text[i].target : " "
+    i < state.text.length ? state.text[i].target : " ",
   );
   charSpans[i] = charSpan;
   return charSpan;
@@ -38,7 +38,7 @@ function renderText(state) {
     "span",
     ...state.text.map((_, i) => renderChar(state, i)),
     renderChar(state, state.text.length),
-    "\n\n"
+    "\n\n",
   );
 }
 
@@ -46,7 +46,7 @@ let resultsSpan;
 
 function renderResults(state) {
   const wpm = Math.floor(
-    (12000 * state.cursor) / ((state.finish || Date.now()) - state.start)
+    (12000 * state.cursor) / ((state.finish || Date.now()) - state.start),
   );
   const accuracy = Math.floor((100 * state.hits) / (state.hits + state.misses));
   let results;
@@ -80,10 +80,10 @@ function renderWordsLinks(state) {
           href: `?wordCount=${wc}`,
           className: wc === state.wordCount ? "selected" : "",
         },
-        wc
+        wc,
       ),
       " ",
-    ])
+    ]),
   );
 }
 
@@ -91,7 +91,7 @@ function renderSourceLink() {
   return h(
     "a",
     { href: "https://github.com/callum-oakley/nonsense" },
-    "source"
+    "source",
   );
 }
 
@@ -102,8 +102,8 @@ export function render(state, app) {
     h(
       "div",
       h("p", renderText(state), renderResults(state)),
-      h("footer", renderWordsLinks(state), renderSourceLink())
-    )
+      h("footer", renderWordsLinks(state), renderSourceLink()),
+    ),
   );
   cursorAtLastRender = state.cursor;
 }
